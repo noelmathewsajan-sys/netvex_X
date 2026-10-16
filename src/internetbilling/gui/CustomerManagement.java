@@ -261,6 +261,7 @@ public class CustomerManagement extends JFrame {
         gbc.weightx = 0.65;
         comp.setFont(UIUtils.FONT_REGULAR);
         comp.setPreferredSize(new Dimension(180, 28));
+        comp.setMinimumSize(new Dimension(180, 28));
         panel.add(comp, gbc);
     }
 

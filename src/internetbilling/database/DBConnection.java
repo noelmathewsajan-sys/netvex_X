@@ -14,23 +14,19 @@ import javax.swing.JOptionPane;
 
 /**
  * Centralized Database Connection Manager.
- * Primary: Microsoft SQL Server (localhost:1433 / InternetBillingDB).
- * Fallback: Standalone Embedded Database Mode (zero installation required for
- * instant testing & evaluation).
+ * Handles JDBC connectivity to MySQL Server and MySQL Workbench schema (InternetBillingDB).
  */
 public class DBConnection {
 
     private static final String CONFIG_FILE = "db.properties";
     private static final String MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static final String MSSQL_DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    private static final String H2_DRIVER = "org.h2.Driver";
 
-    // Mode: "MYSQL", "MSSQL", or "EMBEDDED"
+    // Engine: "MYSQL"
     private static String dbEngine = "MYSQL";
 
-    // Configuration
+    // Configuration defaults
     private static String host = "localhost";
-    private static int port = 3306;
+    private static int port = 3307;
     private static String database = "InternetBillingDB";
     private static String username = "root";
     private static String password = "";
@@ -38,17 +34,10 @@ public class DBConnection {
     private static boolean encrypt = false;
     private static boolean integratedSecurity = false;
 
-    // Embedded DB initialized flag
-    private static boolean embeddedInitialized = false;
-
     static {
         loadConfiguration();
         try {
-            Class.forName(MSSQL_DRIVER);
-        } catch (ClassNotFoundException ignored) {
-        }
-        try {
-            Class.forName(H2_DRIVER);
+            Class.forName(MYSQL_DRIVER);
         } catch (ClassNotFoundException ignored) {
         }
     }
@@ -73,7 +62,7 @@ public class DBConnection {
             try (FileInputStream fis = new FileInputStream(file)) {
                 Properties props = new Properties();
                 props.load(fis);
-                dbEngine = props.getProperty("db.engine", dbEngine);
+                dbEngine = props.getProperty("db.engine", "MYSQL");
                 host = props.getProperty("db.host", host);
                 port = Integer.parseInt(props.getProperty("db.port", String.valueOf(port)));
                 database = props.getProperty("db.name", database);
@@ -91,11 +80,11 @@ public class DBConnection {
     }
 
     /**
-     * Saves database configuration to db.properties.
+     * Saves database configuration to db.properties across workspace locations.
      */
     public static void saveConfiguration() {
         Properties props = new Properties();
-        props.setProperty("db.engine", dbEngine);
+        props.setProperty("db.engine", "MYSQL");
         props.setProperty("db.host", host);
         props.setProperty("db.port", String.valueOf(port));
         props.setProperty("db.name", database);
@@ -105,11 +94,21 @@ public class DBConnection {
         props.setProperty("db.encrypt", String.valueOf(encrypt));
         props.setProperty("db.integratedSecurity", String.valueOf(integratedSecurity));
 
-        File target = getConfigFile();
+        // Save to current directory
+        File target = new File(CONFIG_FILE);
         try (FileOutputStream fos = new FileOutputStream(target)) {
             props.store(fos, "Database Connection Configuration for Internet Billing Management System");
         } catch (IOException e) {
             System.err.println("Warning: Could not save db.properties: " + e.getMessage());
+        }
+
+        // Also save to subfolder if running from workspace root
+        File sub = new File("InternetBillingManagementSystem", CONFIG_FILE);
+        if (sub.getParentFile() != null && sub.getParentFile().exists()) {
+            try (FileOutputStream fos = new FileOutputStream(sub)) {
+                props.store(fos, "Database Connection Configuration for Internet Billing Management System");
+            } catch (IOException ignored) {
+            }
         }
     }
 
@@ -117,9 +116,6 @@ public class DBConnection {
      * Returns the appropriate table identifier for 'Usage' to prevent MySQL keyword conflict.
      */
     public static String getUsageTable() {
-        if ("MSSQL".equalsIgnoreCase(dbEngine)) {
-            return "[Usage]";
-        }
         return "`Usage`";
     }
 
@@ -132,218 +128,46 @@ public class DBConnection {
     }
 
     /**
-     * Constructs JDBC connection URL for Microsoft SQL Server.
-     */
-    public static String getMSSQLConnectionString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("jdbc:sqlserver://").append(host).append(":").append(port).append(";");
-        sb.append("databaseName=").append(database).append(";");
-        sb.append("trustServerCertificate=").append(trustServerCertificate).append(";");
-        sb.append("encrypt=").append(encrypt).append(";");
-        sb.append("loginTimeout=3;");
-        if (integratedSecurity) {
-            sb.append("integratedSecurity=true;");
-        }
-        return sb.toString();
-    }
-
-    /**
-     * Constructs JDBC connection URL for Embedded Standalone Database.
-     */
-    public static String getEmbeddedConnectionString() {
-        return "jdbc:h2:./InternetBillingDB;MODE=MSSQLServer;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1";
-    }
-
-    /**
-     * Gets a database connection according to the configured engine, with automatic
-     * fallback prompt.
+     * Gets a database connection according to the configured engine.
      * 
      * @return Connection object
      * @throws SQLException if connection fails
      */
     public static Connection getConnection() throws SQLException {
-        if ("MYSQL".equalsIgnoreCase(dbEngine)) {
-            try {
-                Class.forName(MYSQL_DRIVER);
-                return DriverManager.getConnection(getMySQLConnectionString(), username, password);
-            } catch (Exception ex) {
-                return handleConnectionFailure("MySQL Server (" + host + ":" + port + ")", ex);
-            }
-        } else if ("MSSQL".equalsIgnoreCase(dbEngine)) {
-            try {
-                Class.forName(MSSQL_DRIVER);
-                if (integratedSecurity) {
-                    return DriverManager.getConnection(getMSSQLConnectionString());
-                } else {
-                    return DriverManager.getConnection(getMSSQLConnectionString(), username, password);
-                }
-            } catch (Exception ex) {
-                return handleConnectionFailure("Microsoft SQL Server (" + host + ":" + port + ")", ex);
-            }
-        } else {
-            return getEmbeddedConnection();
-        }
-    }
-
-    private static Connection handleConnectionFailure(String serverName, Exception ex) throws SQLException {
-        int choice = JOptionPane.showConfirmDialog(
-                null,
-                "Could not connect to " + serverName + ".\n\n" +
-                "Reason: " + ex.getMessage() + "\n\n" +
-                "Would you like to switch to the Standalone Embedded Database Mode?\n" +
-                "(It includes all tables and sample data preloaded with zero setup needed)",
-                "Database Connection Notice",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-
-        if (choice == JOptionPane.YES_OPTION) {
-            dbEngine = "EMBEDDED";
-            saveConfiguration();
-            return getEmbeddedConnection();
-        } else {
-            throw new SQLException(serverName + " connection failed: " + ex.getMessage(), ex);
-        }
-    }
-
-    private static Connection getEmbeddedConnection() throws SQLException {
         try {
-            Class.forName(H2_DRIVER);
-        } catch (ClassNotFoundException e) {
-            throw new SQLException("Embedded Database Driver not found: " + H2_DRIVER, e);
-        }
-
-        Connection conn = DriverManager.getConnection(getEmbeddedConnectionString(), "sa", "");
-        if (!embeddedInitialized) {
-            initializeEmbeddedDatabase(conn);
-            embeddedInitialized = true;
-        }
-        return conn;
-    }
-
-    /**
-     * Populates embedded database tables and sample data.
-     */
-    public static void initializeEmbeddedDatabase(Connection conn) {
-        try (Statement stmt = conn.createStatement()) {
-            // 1. Admin
-            stmt.execute("CREATE TABLE IF NOT EXISTS Admin (" +
-                    "admin_id INT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY, " +
-                    "username VARCHAR(50) NOT NULL UNIQUE, " +
-                    "password VARCHAR(100) NOT NULL)");
-
-            // 2. Plans
-            stmt.execute("CREATE TABLE IF NOT EXISTS Plans (" +
-                    "plan_id VARCHAR(30) PRIMARY KEY, " +
-                    "plan_name VARCHAR(100) NOT NULL, " +
-                    "speed_tier VARCHAR(50) NOT NULL, " +
-                    "monthly_tariff DECIMAL(10,2) NOT NULL, " +
-                    "data_limit DECIMAL(10,2) NOT NULL, " +
-                    "extra_data_charge DECIMAL(10,2) NOT NULL, " +
-                    "equipment_rental DECIMAL(10,2) NOT NULL, " +
-                    "late_payment_fine DECIMAL(10,2) NOT NULL)");
-
-            // 3. Customers
-            stmt.execute("CREATE TABLE IF NOT EXISTS Customers (" +
-                    "customer_id VARCHAR(30) PRIMARY KEY, " +
-                    "name VARCHAR(100) NOT NULL, " +
-                    "address VARCHAR(255) NOT NULL, " +
-                    "phone VARCHAR(20) NOT NULL, " +
-                    "email VARCHAR(100) NOT NULL, " +
-                    "username VARCHAR(50) NOT NULL UNIQUE, " +
-                    "password VARCHAR(100) NOT NULL, " +
-                    "plan_id VARCHAR(30) NOT NULL, " +
-                    "connection_date DATE NOT NULL, " +
-                    "status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE')");
-
-            // 4. Usage
-            stmt.execute("CREATE TABLE IF NOT EXISTS Usage (" +
-                    "usage_id INT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY, " +
-                    "customer_id VARCHAR(30) NOT NULL, " +
-                    "billing_month VARCHAR(20) NOT NULL, " +
-                    "data_used DECIMAL(10,2) NOT NULL, " +
-                    "extra_data DECIMAL(10,2) NOT NULL DEFAULT 0, " +
-                    "CONSTRAINT UQ_Usage_Customer_Month UNIQUE (customer_id, billing_month))");
-
-            // 5. Bills
-            stmt.execute("CREATE TABLE IF NOT EXISTS Bills (" +
-                    "bill_id VARCHAR(30) PRIMARY KEY, " +
-                    "customer_id VARCHAR(30) NOT NULL, " +
-                    "usage_id INT NULL, " +
-                    "billing_month VARCHAR(20) NOT NULL, " +
-                    "plan_tariff DECIMAL(10,2) NOT NULL, " +
-                    "equipment_rental DECIMAL(10,2) NOT NULL, " +
-                    "extra_usage_charge DECIMAL(10,2) NOT NULL DEFAULT 0, " +
-                    "late_fine DECIMAL(10,2) NOT NULL DEFAULT 0, " +
-                    "total_amount DECIMAL(10,2) NOT NULL, " +
-                    "due_date DATE NOT NULL, " +
-                    "bill_status VARCHAR(20) NOT NULL DEFAULT 'UNPAID', " +
-                    "CONSTRAINT UQ_Bills_Customer_Month UNIQUE (customer_id, billing_month))");
-
-            // 6. Payments
-            stmt.execute("CREATE TABLE IF NOT EXISTS Payments (" +
-                    "payment_id VARCHAR(30) PRIMARY KEY, " +
-                    "bill_id VARCHAR(30) NOT NULL, " +
-                    "customer_id VARCHAR(30) NOT NULL, " +
-                    "payment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
-                    "amount DECIMAL(10,2) NOT NULL, " +
-                    "payment_method VARCHAR(50) NOT NULL, " +
-                    "payment_reference VARCHAR(100) NOT NULL, " +
-                    "payment_status VARCHAR(20) NOT NULL DEFAULT 'SUCCESS')");
-
-            // Check if admin exists; if not, populate sample data
-            try (ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM Admin")) {
-                if (rs.next() && rs.getInt(1) == 0) {
-                    stmt.execute("INSERT INTO Admin (username, password) VALUES ('admin', 'admin123')");
-
-                    stmt.execute("INSERT INTO Plans VALUES " +
-                            "('PLAN01', 'Basic Starter', '25 Mbps', 399.00, 100.00, 10.00, 50.00, 50.00), " +
-                            "('PLAN02', 'Standard Home', '50 Mbps', 699.00, 250.00, 8.00, 75.00, 75.00), " +
-                            "('PLAN03', 'Premium Streamer', '100 Mbps', 999.00, 500.00, 5.00, 100.00, 100.00), " +
-                            "('PLAN04', 'Ultra Enterprise', '300 Mbps', 1499.00, 1000.00, 3.00, 150.00, 150.00)");
-
-                    stmt.execute("INSERT INTO Customers VALUES " +
-                            "('CUST101', 'John Doe', '123 Elm Street, Cityville', '9876543210', 'john.doe@email.com', 'johndoe', 'cust123', 'PLAN02', '2026-01-15', 'ACTIVE'), "
-                            +
-                            "('CUST102', 'Sarah Connor', '456 Pine Avenue, Metropolis', '9876543211', 'sarah.c@email.com', 'sarahc', 'cust123', 'PLAN03', '2026-02-10', 'ACTIVE'), "
-                            +
-                            "('CUST103', 'Michael Scott', '1725 Slough Ave, Scranton', '9876543212', 'michael.s@email.com', 'michaels', 'cust123', 'PLAN01', '2026-03-05', 'ACTIVE'), "
-                            +
-                            "('CUST104', 'Bruce Wayne', '1007 Mountain Drive, Gotham', '9876543213', 'bruce.w@email.com', 'brucew', 'cust123', 'PLAN04', '2026-01-20', 'ACTIVE'), "
-                            +
-                            "('CUST105', 'Peter Parker', '20 Ingram Street, Queens', '9876543214', 'peter.p@email.com', 'peterp', 'cust123', 'PLAN02', '2026-04-12', 'INACTIVE')");
-
-                    stmt.execute("INSERT INTO Usage (customer_id, billing_month, data_used, extra_data) VALUES " +
-                            "('CUST101', '2026-08', 220.00, 0.00), " +
-                            "('CUST101', '2026-09', 275.00, 25.00), " +
-                            "('CUST102', '2026-08', 480.00, 0.00), " +
-                            "('CUST102', '2026-09', 530.00, 30.00), " +
-                            "('CUST103', '2026-08', 95.00, 0.00), " +
-                            "('CUST103', '2026-09', 115.00, 15.00), " +
-                            "('CUST104', '2026-09', 650.00, 0.00)");
-
-                    stmt.execute(
-                            "INSERT INTO Bills (bill_id, customer_id, usage_id, billing_month, plan_tariff, equipment_rental, extra_usage_charge, late_fine, total_amount, due_date, bill_status) VALUES "
-                                    +
-                                    "('BILL-202608-101', 'CUST101', 1, '2026-08', 699.00, 75.00, 0.00, 0.00, 774.00, '2026-09-05', 'PAID'), "
-                                    +
-                                    "('BILL-202609-101', 'CUST101', 2, '2026-09', 699.00, 75.00, 200.00, 0.00, 974.00, '2026-10-05', 'UNPAID'), "
-                                    +
-                                    "('BILL-202608-102', 'CUST102', 3, '2026-08', 999.00, 100.00, 0.00, 0.00, 1099.00, '2026-09-05', 'PAID'), "
-                                    +
-                                    "('BILL-202609-102', 'CUST102', 4, '2026-09', 999.00, 100.00, 150.00, 0.00, 1249.00, '2026-10-05', 'UNPAID'), "
-                                    +
-                                    "('BILL-202608-103', 'CUST103', 5, '2026-08', 399.00, 50.00, 0.00, 50.00, 499.00, '2026-09-05', 'OVERDUE')");
-
-                    stmt.execute(
-                            "INSERT INTO Payments (payment_id, bill_id, customer_id, payment_date, amount, payment_method, payment_reference, payment_status) VALUES "
-                                    +
-                                    "('PAY-88001', 'BILL-202608-101', 'CUST101', CURRENT_TIMESTAMP, 774.00, 'UPI', 'UPI-REF-99281729', 'SUCCESS'), "
-                                    +
-                                    "('PAY-88002', 'BILL-202608-102', 'CUST102', CURRENT_TIMESTAMP, 1099.00, 'Credit Card', 'TXN-CC-48201948', 'SUCCESS')");
-                }
+            Class.forName(MYSQL_DRIVER);
+        } catch (ClassNotFoundException ex) {
+            String msg = "MySQL JDBC Driver (" + MYSQL_DRIVER + ") not found.\n" +
+                         "Please ensure mysql-connector-j-8.3.0.jar is in the lib/ folder\n" +
+                         "and added to project Libraries in NetBeans.";
+            if (!java.awt.GraphicsEnvironment.isHeadless()) {
+                JOptionPane.showMessageDialog(null, msg, "MySQL Driver Missing", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (SQLException e) {
-            System.err.println("Embedded DB init notice: " + e.getMessage());
+            throw new SQLException(msg, ex);
+        }
+
+        try {
+            return DriverManager.getConnection(getMySQLConnectionString(), username, password);
+        } catch (SQLException ex) {
+            String helpMsg = "Could not connect to MySQL Server at " + host + ":" + port + " (Database: " + database + ").\n\n";
+            int errorCode = ex.getErrorCode();
+            if (errorCode == 1045) {
+                helpMsg += "Error 1045: Access denied for user '" + username + "'.\n" +
+                           "Please update the password in db.properties to match your MySQL root password.";
+            } else if (errorCode == 1049) {
+                helpMsg += "Error 1049: Database '" + database + "' does not exist.\n" +
+                           "Please open database.sql in MySQL Workbench and execute it to create the schema.";
+            } else if (ex.getMessage() != null && (ex.getMessage().contains("Communications link failure") || ex.getMessage().contains("Connection refused"))) {
+                helpMsg += "Connection Refused: MySQL Server service is not running.\n" +
+                           "Please ensure MySQL Server 8.0 (MySQL80) service is running on Windows.";
+            } else {
+                helpMsg += "Error: " + ex.getMessage();
+            }
+
+            if (!java.awt.GraphicsEnvironment.isHeadless()) {
+                JOptionPane.showMessageDialog(null, helpMsg, "MySQL Connection Error", JOptionPane.ERROR_MESSAGE);
+            }
+            throw new SQLException(helpMsg, ex);
         }
     }
 
@@ -438,7 +262,7 @@ public class DBConnection {
         System.out.println("Internet Billing Management System - DB Test Utility");
         System.out.println("==================================================");
         loadConfiguration();
-        System.out.println("Configured Engine: " + dbEngine);
+        System.out.println("Engine: " + dbEngine);
         System.out.println("Target: " + host + ":" + port + "/" + database);
         System.out.println("User: " + username);
         System.out.println("Attempting connection...");
@@ -478,4 +302,3 @@ public class DBConnection {
         System.out.println("==================================================");
     }
 }
-

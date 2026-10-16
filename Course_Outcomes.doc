@@ -1,0 +1,48 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<title>Project Course Outcomes</title>
+<style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-family: 'Times New Roman', serif;
+    font-size: 12pt;
+  }
+  th, td {
+    padding: 10px;
+  }
+</style>
+</head>
+<body>
+<p style="font-family: 'Times New Roman', serif; font-size: 12pt;">
+<strong>Project Course Outcomes (PCO):</strong> After the completion of the project, the student will be able to:
+</p>
+<table style="width: 100%;">
+  <tr>
+    <td style="width: 15%; font-weight: bold;">PCO1</td>
+    <td><strong>Design and implement</strong> an interactive Graphical User Interface (GUI) using Java Swing to manage administrator and subscriber interactions.</td>
+  </tr>
+  <tr>
+    <td style="width: 15%; font-weight: bold;">PCO2</td>
+    <td><strong>Construct and integrate</strong> a relational database using MySQL to securely store and retrieve application data, such as user profiles, billing plans, and payment records.</td>
+  </tr>
+  <tr>
+    <td style="width: 15%; font-weight: bold;">PCO3</td>
+    <td><strong>Develop</strong> robust backend logic using Java Database Connectivity (JDBC) to establish seamless and reliable communication between the desktop application and the database.</td>
+  </tr>
+  <tr>
+    <td style="width: 15%; font-weight: bold;">PCO4</td>
+    <td><strong>Apply</strong> secure coding practices by utilizing parameterized SQL queries and relational constraints to prevent SQL injection and ensure data integrity.</td>
+  </tr>
+  <tr>
+    <td style="width: 15%; font-weight: bold;">PCO5</td>
+    <td><strong>Automate</strong> complex business processes, including monthly data usage calculations, invoice generation, and simulated online payment processing.</td>
+  </tr>
+  <tr>
+    <td style="width: 15%; font-weight: bold;">PCO6</td>
+    <td><strong>Evaluate and troubleshoot</strong> the integrated software system to ensure functional correctness, data consistency, and a reliable user experience.</td>
+  </tr>
+</table>
+</body>
+</html>

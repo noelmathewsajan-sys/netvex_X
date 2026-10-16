@@ -1,0 +1,294 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<title>PO and PSO Mapping with Justification - Internet Billing Management System</title>
+<style>
+  body {
+    font-family: 'Times New Roman', serif;
+    font-size: 12pt;
+    line-height: 1.3;
+    margin: 20px;
+  }
+  h2, h3 {
+    text-align: center;
+    font-family: 'Times New Roman', serif;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 25px;
+  }
+  table, th, td {
+    border: 1px solid black;
+  }
+  th {
+    background-color: #f2f2f2;
+    padding: 8px;
+    font-weight: bold;
+    text-align: center;
+  }
+  td {
+    padding: 8px;
+    vertical-align: top;
+  }
+  .center {
+    text-align: center;
+  }
+  .pco-header {
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .pso-highlight {
+    color: #b30000;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<h2>PROJECT COURSE OUTCOMES (PCO) TO PO/PSO MAPPING &amp; JUSTIFICATION</h2>
+<p style="text-align: center; font-weight: bold;">PROJECT: NETVEX - INTERNET BILLING MANAGEMENT SYSTEM</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 12%;">SNO</th>
+      <th style="width: 18%;">PO/PSO MAPPED</th>
+      <th style="width: 15%;">LEVEL OF MAPPING</th>
+      <th style="width: 55%;">JUSTIFICATION</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- ==================== PCO 1 ==================== -->
+    <tr>
+      <td rowspan="7" class="pco-header">PCO 1</td>
+      <td class="center">PO - 1</td>
+      <td class="center">3</td>
+      <td>Applies engineering and computing fundamentals to design an interactive Java Swing user interface for ISP subscriber and admin interactions.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 2</td>
+      <td class="center">3</td>
+      <td>Analyzes manual ISP record-keeping and billing bottlenecks to identify a structured, responsive desktop GUI solution.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 7</td>
+      <td class="center">3</td>
+      <td>Promotes sustainable and paperless operations by replacing traditional paper bills with digital dashboard interfaces.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 10</td>
+      <td class="center">3</td>
+      <td>Requires clear visual communication and organized presentation of subscriber accounts, plans, and transaction details.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 1</td>
+      <td class="center">3</td>
+      <td>Uses practical computer science knowledge to model application UI state, event-driven components, and user workflows.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 2</td>
+      <td class="center">3</td>
+      <td>Uses Java Swing, NetBeans IDE, and GUI design tools to implement role-based consoles for administrators and subscribers.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 3</td>
+      <td class="center">3</td>
+      <td>Supports secure handling and reliable presentation of confidential subscriber credentials and financial billing summaries.</td>
+    </tr>
+
+    <!-- ==================== PCO 2 ==================== -->
+    <tr>
+      <td rowspan="7" class="pco-header">PCO 2</td>
+      <td class="center">PO - 2</td>
+      <td class="center">3</td>
+      <td>Analyzes ISP business data requirements to design a normalized, robust relational database schema in MySQL.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 6</td>
+      <td class="center">3</td>
+      <td>Supports responsible ISP operational governance and data privacy through structured storage of customer identity and billing history.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 8</td>
+      <td class="center">3</td>
+      <td>Applies ethical standards to safeguard sensitive subscriber personal records, broadband credentials, and financial payment ledgers.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 12</td>
+      <td class="center">3</td>
+      <td>Encourages continuous learning in modern database management, SQL schema optimization, and relational data architecture.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 1</td>
+      <td class="center">3</td>
+      <td>Uses practical database knowledge to model entities, primary/foreign keys, and relationships across subscribers, plans, usage, and bills.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 2</td>
+      <td class="center">3</td>
+      <td>Uses MySQL Server and relational database tools to implement tables, constraints, and audit trails for internet billing.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 3</td>
+      <td class="center">3</td>
+      <td>Supports secure storage, rapid retrieval, and high integrity handling of large-scale ISP customer and usage data.</td>
+    </tr>
+
+    <!-- ==================== PCO 3 ==================== -->
+    <tr>
+      <td rowspan="8" class="pco-header">PCO 3</td>
+      <td class="center">PO - 3</td>
+      <td class="center">3</td>
+      <td>Designs seamless backend connectivity and Data Access Object (DAO) workflows between Java Swing and the database using JDBC.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 6</td>
+      <td class="center">3</td>
+      <td>Addresses ISP operational and customer service needs by ensuring persistent, real-time synchronization of billing and usage data.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 7</td>
+      <td class="center">3</td>
+      <td>Supports digital transformation and eco-friendly record-keeping by automating data transmission without physical paperwork.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 9</td>
+      <td class="center">3</td>
+      <td>Facilitates modular software development and effective teamwork through decoupled architectural layers (Presentation, Service, DAO).</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 10</td>
+      <td class="center">3</td>
+      <td>Requires precise data interchange and clear reporting of database query results and transaction states to the application interface.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 12</td>
+      <td class="center">3</td>
+      <td>Promotes self-directed learning in enterprise backend programming, connection pooling, and JDBC driver integration.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 1</td>
+      <td class="center">3</td>
+      <td>Applies practical computing knowledge to implement database connections, result set parsing, and object-relational mapping.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 2</td>
+      <td class="center">3</td>
+      <td>Uses Java Database Connectivity (JDBC) and modern Java APIs to implement customer lookup, plan assignment, and billing operations.</td>
+    </tr>
+
+    <!-- ==================== PCO 4 ==================== -->
+    <tr>
+      <td rowspan="6" class="pco-header">PCO 4</td>
+      <td class="center">PO - 1</td>
+      <td class="center">3</td>
+      <td>Applies engineering principles to implement secure coding practices, parameterized queries, and defensive database access methods.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 2</td>
+      <td class="center">3</td>
+      <td>Analyzes security risks such as SQL injection and data anomalies to enforce relational constraints and input sanitization.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 7</td>
+      <td class="center">3</td>
+      <td>Promotes robust, long-term, and tamper-resistant digital record management free from data corruption and vulnerabilities.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 10</td>
+      <td class="center">3</td>
+      <td>Supports transparent system administration by maintaining traceable SQL logs, clear validation messages, and system documentation.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 1</td>
+      <td class="center">3</td>
+      <td>Uses practical computing and cybersecurity knowledge to implement parameterized PreparedStatements that safeguard database queries.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 2</td>
+      <td class="center">3</td>
+      <td>Uses programming logic and relational database rules (CASCADE, UNIQUE, CHECK) to maintain strict data integrity.</td>
+    </tr>
+
+    <!-- ==================== PCO 5 ==================== -->
+    <tr>
+      <td rowspan="6" class="pco-header">PCO 5</td>
+      <td class="center">PO - 2</td>
+      <td class="center">3</td>
+      <td>Analyzes internet tariff policies, quota limits, overage rates, and tax parameters to formulate automated billing algorithms.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 6</td>
+      <td class="center">3</td>
+      <td>Protects consumer rights and ensures fair commercial practices by automating accurate, dispute-free invoice generation.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 8</td>
+      <td class="center">3</td>
+      <td>Applies ethical standards to financial calculations, ensuring transparent pricing, proper fine calculations, and fraud-resistant payments.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 12</td>
+      <td class="center">3</td>
+      <td>Encourages continuous learning in modern financial technology workflows, automated invoice processing, and payment gateway simulation.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 1</td>
+      <td class="center">3</td>
+      <td>Uses algorithmic computing and mathematical logic to compute monthly consumption, extra data surcharges, and total bill amounts.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 2</td>
+      <td class="center">3</td>
+      <td>Uses Java business logic modules to automate end-to-end invoice generation, payment clearance, and electronic receipt issuance.</td>
+    </tr>
+
+    <!-- ==================== PCO 6 ==================== -->
+    <tr>
+      <td rowspan="8" class="pco-header">PCO 6</td>
+      <td class="center">PO - 3</td>
+      <td class="center">3</td>
+      <td>Designs comprehensive test workflows covering subscriber registration, plan switching, usage recording, and payment settlements.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 6</td>
+      <td class="center">3</td>
+      <td>Validates system dependability and public trust by ensuring zero discrepancy in billing sums, customer balances, and reports.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 7</td>
+      <td class="center">3</td>
+      <td>Validates paperless and efficient automated billing workflows, ensuring resource optimization and sustainable operations.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 9</td>
+      <td class="center">3</td>
+      <td>Encourages teamwork and peer code reviews in identifying runtime bugs, stress testing database queries, and refining the UI.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 10</td>
+      <td class="center">3</td>
+      <td>Requires clear documentation of test cases, bug reports, and user validation manuals to ensure verifiable system operation.</td>
+    </tr>
+    <tr>
+      <td class="center">PO - 12</td>
+      <td class="center">3</td>
+      <td>Promotes continuous learning through methodical software debugging, error logging, and iterative code refinement.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 1</td>
+      <td class="center">3</td>
+      <td>Applies software verification, validation principles, and exception handling techniques to guarantee reliable system operation.</td>
+    </tr>
+    <tr>
+      <td class="center pso-highlight">PSO - 2</td>
+      <td class="center">3</td>
+      <td>Uses NetBeans debugging tools and test data scenarios to identify edge cases, resolve null pointer exceptions, and optimize SQL performance.</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

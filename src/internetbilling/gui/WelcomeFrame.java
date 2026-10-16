@@ -35,7 +35,6 @@ public class WelcomeFrame extends JFrame {
     private JButton btnAdminLogin;
     private JButton btnUserLogin;
     private JButton btnExit;
-    private JButton btnDBSettings;
     private JLabel lblTitle;
     private JLabel lblSubtitle;
     private JLabel lblVersion;
@@ -45,7 +44,7 @@ public class WelcomeFrame extends JFrame {
     }
 
     private void initComponents() {
-        setTitle("Internet Billing Management System - ISP Portal");
+        setTitle("NETVEX - Internet Billing Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 540);
         setLocationRelativeTo(null);
@@ -66,9 +65,9 @@ public class WelcomeFrame extends JFrame {
         ));
         cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));
 
-        JLabel lblBrand = new JLabel("  FIBERLINK BROADBAND NETWORK", SwingConstants.CENTER);
+        JLabel lblBrand = new JLabel("  NETVEX", SwingConstants.CENTER);
         lblBrand.setIcon(UIUtils.getGlobeIcon(16, UIUtils.SECONDARY_BLUE));
-        lblBrand.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblBrand.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lblBrand.setForeground(UIUtils.SECONDARY_BLUE);
         lblBrand.setAlignmentX(CENTER_ALIGNMENT);
 
@@ -100,15 +99,9 @@ public class WelcomeFrame extends JFrame {
         btnUserLogin.setAlignmentX(CENTER_ALIGNMENT);
         btnUserLogin.addActionListener(e -> openUserLogin());
 
-        JPanel bottomBtnRow = new JPanel(new GridLayout(1, 2, 12, 0));
+        JPanel bottomBtnRow = new JPanel(new GridLayout(1, 1, 0, 0));
         bottomBtnRow.setOpaque(false);
         bottomBtnRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
-
-        btnDBSettings = new JButton("Database Settings");
-        UIUtils.styleSecondaryButton(btnDBSettings);
-        btnDBSettings.setIcon(UIUtils.getDatabaseIcon(14, UIUtils.TEXT_DARK));
-        btnDBSettings.setIconTextGap(8);
-        btnDBSettings.addActionListener(e -> openDBSettingsDialog());
 
         btnExit = new JButton("Exit System");
         UIUtils.styleDangerButton(btnExit);
@@ -116,7 +109,6 @@ public class WelcomeFrame extends JFrame {
         btnExit.setIconTextGap(8);
         btnExit.addActionListener(e -> System.exit(0));
 
-        bottomBtnRow.add(btnDBSettings);
         bottomBtnRow.add(btnExit);
 
         JLabel lblFootNote = new JLabel("  Connected to: " + DBConnection.getDbEngine() + " Database", SwingConstants.CENTER);
@@ -162,84 +154,7 @@ public class WelcomeFrame extends JFrame {
         new UserLogin().setVisible(true);
     }
 
-    private void openDBSettingsDialog() {
-        JComboBox<String> cmbEngine = new JComboBox<>(new String[]{
-            "MySQL / MySQL Workbench (Port 3306)",
-            "Microsoft SQL Server (Port 1433)",
-            "Standalone Embedded Database (Zero Setup)"
-        });
 
-        int activeIdx = 0;
-        if ("MSSQL".equalsIgnoreCase(DBConnection.getDbEngine())) activeIdx = 1;
-        else if ("EMBEDDED".equalsIgnoreCase(DBConnection.getDbEngine())) activeIdx = 2;
-        cmbEngine.setSelectedIndex(activeIdx);
-
-        JTextField txtHost = new JTextField(DBConnection.getHost());
-        JTextField txtPort = new JTextField(String.valueOf(DBConnection.getPort()));
-        JTextField txtDb = new JTextField(DBConnection.getDatabase());
-        JTextField txtUser = new JTextField(DBConnection.getUsername());
-        JPasswordField txtPass = new JPasswordField(DBConnection.getPassword());
-
-        cmbEngine.addActionListener(e -> {
-            int sel = cmbEngine.getSelectedIndex();
-            if (sel == 0) { // MySQL
-                txtPort.setText("3306");
-                txtUser.setText("root");
-                txtPass.setText("");
-            } else if (sel == 1) { // MSSQL
-                txtPort.setText("1433");
-                txtUser.setText("sa");
-                txtPass.setText("YourPassword123!");
-            }
-        });
-
-        JPanel panel = new JPanel(new GridLayout(6, 2, 8, 8));
-        panel.add(new JLabel("Database Engine:"));
-        panel.add(cmbEngine);
-        panel.add(new JLabel("Host / Server:"));
-        panel.add(txtHost);
-        panel.add(new JLabel("Port:"));
-        panel.add(txtPort);
-        panel.add(new JLabel("Database Name:"));
-        panel.add(txtDb);
-        panel.add(new JLabel("DB Username:"));
-        panel.add(txtUser);
-        panel.add(new JLabel("DB Password:"));
-        panel.add(txtPass);
-
-        int result = JOptionPane.showConfirmDialog(
-            this, panel, "Database Connection Settings",
-            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
-        );
-
-        if (result == JOptionPane.OK_OPTION) {
-            try {
-                String chosenEngine = "MYSQL";
-                if (cmbEngine.getSelectedIndex() == 1) chosenEngine = "MSSQL";
-                else if (cmbEngine.getSelectedIndex() == 2) chosenEngine = "EMBEDDED";
-
-                DBConnection.setDbEngine(chosenEngine);
-                DBConnection.setHost(txtHost.getText().trim());
-                DBConnection.setPort(Integer.parseInt(txtPort.getText().trim()));
-                DBConnection.setDatabase(txtDb.getText().trim());
-                DBConnection.setUsername(txtUser.getText().trim());
-                DBConnection.setPassword(new String(txtPass.getPassword()));
-                DBConnection.saveConfiguration();
-
-                if (DBConnection.testConnection()) {
-                    String msg = "Connected successfully to " + cmbEngine.getSelectedItem() + "!";
-                    JOptionPane.showMessageDialog(this, msg, "Connection Success", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                        "Saved settings, but connection test failed.\nPlease make sure the selected database is running and InternetBillingDB is created.",
-                        "Connection Test Warning", JOptionPane.WARNING_MESSAGE);
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error in DB settings: " + ex.getMessage(),
-                    "Configuration Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
 
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> new WelcomeFrame().setVisible(true));

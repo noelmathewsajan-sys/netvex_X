@@ -53,7 +53,7 @@ public class UserDashboard extends JFrame {
 
     private void initComponents() {
         String name = (customer != null) ? customer.getName() : "Customer";
-        setTitle("Subscriber Portal - Welcome, " + name);
+        setTitle("NETVEX Subscriber Portal - Welcome, " + name);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1100, 720);
         setLocationRelativeTo(null);
@@ -75,7 +75,7 @@ public class UserDashboard extends JFrame {
         JPanel titleGroup = new JPanel(new GridLayout(2, 1, 0, 2));
         titleGroup.setOpaque(false);
 
-        JLabel lblAppTitle = new JLabel("FIBERLINK BROADBAND  |  SUBSCRIBER PORTAL");
+        JLabel lblAppTitle = new JLabel("NETVEX  |  SUBSCRIBER PORTAL");
         lblAppTitle.setFont(UIUtils.FONT_HEADER);
         lblAppTitle.setForeground(Color.WHITE);
 
@@ -231,7 +231,7 @@ public class UserDashboard extends JFrame {
         // Footer
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER));
         footer.setBackground(UIUtils.BG_LIGHT);
-        JLabel lblFoot = new JLabel("High-Speed Fiber Broadband | Customer Self-Service Portal");
+        JLabel lblFoot = new JLabel("NETVEX | Customer Self-Service Portal");
         lblFoot.setFont(UIUtils.FONT_SMALL);
         lblFoot.setForeground(UIUtils.TEXT_MUTED);
         footer.add(lblFoot);
@@ -358,9 +358,9 @@ public class UserDashboard extends JFrame {
 
     private void showSupportDialog() {
         JOptionPane.showMessageDialog(this,
-            "Internet Service Provider 24/7 Customer Care\n\n" +
-            "Toll-Free Helpline:  1800-ISP-FIBER (1800-477-34237)\n" +
-            "Email Support:       support@ispbilling.com\n" +
+            "NETVEX 24/7 Customer Care\n\n" +
+            "Toll-Free Helpline:  1800-NETVEX (1800-638-839)\n" +
+            "Email Support:       support@netvex.com\n" +
             "Office Address:      100 Tech Park Blvd, Suite 400\n" +
             "Network Status:      Normal / Optimal",
             "Customer Support & Helpdesk", JOptionPane.INFORMATION_MESSAGE);

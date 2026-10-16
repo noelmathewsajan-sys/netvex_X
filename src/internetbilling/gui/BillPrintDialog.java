@@ -87,8 +87,8 @@ public class BillPrintDialog extends JDialog {
 
         StringBuilder sb = new StringBuilder();
         sb.append("========================================================\n");
-        sb.append("                     INTERNET BILL                      \n");
-        sb.append("          INTERNET BILLING MANAGEMENT SYSTEM            \n");
+        sb.append("                     NETVEX BILL                        \n");
+        sb.append("          NETVEX INTERNET BILLING MANAGEMENT SYSTEM     \n");
         sb.append("========================================================\n\n");
 
         sb.append(String.format("Bill ID:          %s\n", bill.getBillId()));
@@ -117,8 +117,8 @@ public class BillPrintDialog extends JDialog {
         sb.append(String.format("Payment Status:           [%s]\n\n", bill.getBillStatus()));
 
         sb.append("========================================================\n");
-        sb.append("             Thank You For Choosing Our ISP!            \n");
-        sb.append("        For 24/7 Support: support@ispbilling.com        \n");
+        sb.append("            Thank You For Choosing NETVEX!              \n");
+        sb.append("         For 24/7 Support: support@netvex.com           \n");
         sb.append("========================================================\n");
 
         txtReceipt.setText(sb.toString());
@@ -127,7 +127,7 @@ public class BillPrintDialog extends JDialog {
 
     private void printBill() {
         try {
-            MessageFormat header = new MessageFormat("Internet Bill - " + bill.getBillId());
+            MessageFormat header = new MessageFormat("NETVEX Bill - " + bill.getBillId());
             MessageFormat footer = new MessageFormat("Page {0}");
             boolean complete = txtReceipt.print(header, footer, true, null, null, true);
             if (complete) {

@@ -46,7 +46,7 @@ public class AdminLogin extends JFrame {
     }
 
     private void initComponents() {
-        setTitle("Admin Portal Login - Internet Billing Management System");
+        setTitle("NETVEX Admin Portal Login - Internet Billing Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(620, 540);
         setLocationRelativeTo(null);
@@ -69,7 +69,7 @@ public class AdminLogin extends JFrame {
         ));
 
         // ISP Brand Tag
-        JLabel lblBrand = new JLabel("  ISP NETWORK OPERATIONS", SwingConstants.CENTER);
+        JLabel lblBrand = new JLabel("  NETVEX NETWORK OPERATIONS", SwingConstants.CENTER);
         lblBrand.setIcon(UIUtils.getGlobeIcon(14, UIUtils.SECONDARY_BLUE));
         lblBrand.setFont(new Font("Segoe UI", Font.BOLD, 11));
         lblBrand.setForeground(UIUtils.SECONDARY_BLUE);

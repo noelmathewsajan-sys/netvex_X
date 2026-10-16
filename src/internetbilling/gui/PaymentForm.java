@@ -52,7 +52,7 @@ public class PaymentForm extends JFrame {
     }
 
     private void initComponents() {
-        setTitle("Simulated Online Payment - Internet Billing Management System");
+        setTitle("NETVEX Simulated Online Payment - Internet Billing Management System");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(580, 520);
         setLocationRelativeTo(null);
@@ -63,7 +63,7 @@ public class PaymentForm extends JFrame {
         // Header
         JPanel header = UIUtils.createHeaderPanel(
             "ONLINE PAYMENT GATEWAY (SIMULATED)",
-            "Instant & secure bill clearance for high-speed fiber broadband"
+            "Instant & secure bill clearance for NETVEX high-speed broadband"
         );
         add(header, BorderLayout.NORTH);
 
@@ -160,20 +160,20 @@ public class PaymentForm extends JFrame {
         gbc.weightx = 0.6;
         comp.setFont(UIUtils.FONT_REGULAR);
         comp.setPreferredSize(new Dimension(200, 30));
+        comp.setMinimumSize(new Dimension(200, 30));
         p.add(comp, gbc);
     }
 
     private void updateMethodPrompt() {
         String method = (String) cmbPaymentMethod.getSelectedItem();
+        txtReference.setText(""); // Start with empty field for realism
+        
         if ("UPI".equalsIgnoreCase(method)) {
-            lblRefPrompt.setText("UPI ID / VPA (e.g. user@okhdfcbank):");
-            txtReference.setText("user@upi");
+            lblRefPrompt.setText("Enter UPI ID (e.g. name@bank):");
         } else if ("Debit Card".equalsIgnoreCase(method) || "Credit Card".equalsIgnoreCase(method)) {
-            lblRefPrompt.setText("Card Number (Last 4 digits or ref):");
-            txtReference.setText("CARD-ENDING-4892");
+            lblRefPrompt.setText("Enter 16-Digit Card Number:");
         } else {
-            lblRefPrompt.setText("Net Banking Bank / Ref ID:");
-            txtReference.setText("HDFC-NETBANK-REF");
+            lblRefPrompt.setText("Select Bank (or enter Bank Code):");
         }
     }
 
@@ -203,6 +203,12 @@ public class PaymentForm extends JFrame {
             JOptionPane.showMessageDialog(this, "Please provide payment reference / details.", "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
+        // Basic validation for realism
+        if (("Debit Card".equalsIgnoreCase(method) || "Credit Card".equalsIgnoreCase(method)) && reference.length() < 12) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid 16-digit card number.", "Invalid Card", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         BigDecimal amount;
         try {
@@ -212,24 +218,38 @@ public class PaymentForm extends JFrame {
             return;
         }
 
-        try {
-            Payment payment = paymentService.processPayment(billId, customerId, amount, method, reference);
-            JOptionPane.showMessageDialog(this,
-                "Payment Successful!\n\n" +
-                "Payment ID:       " + payment.getPaymentId() + "\n" +
-                "Bill ID:          " + payment.getBillId() + "\n" +
-                "Amount Paid:      " + UIUtils.formatCurrency(payment.getAmount()) + "\n" +
-                "Payment Method:   " + payment.getPaymentMethod() + "\n" +
-                "Transaction Date: " + payment.getPaymentDate() + "\n\n" +
-                "Thank you! Your bill status is now PAID.",
-                "Payment Confirmation", JOptionPane.INFORMATION_MESSAGE);
+        // Simulate realistic gateway processing delay
+        btnPayNow.setEnabled(false);
+        btnPayNow.setText("Processing...");
+        setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
 
-            dispose();
-            if (onPaymentSuccessCallback != null) {
-                onPaymentSuccessCallback.run();
+        javax.swing.Timer timer = new javax.swing.Timer(2000, e -> {
+            try {
+                Payment payment = paymentService.processPayment(billId, customerId, amount, method, reference);
+                setCursor(java.awt.Cursor.getDefaultCursor());
+                
+                JOptionPane.showMessageDialog(this,
+                    "Payment Successful!\n\n" +
+                    "Payment ID:       " + payment.getPaymentId() + "\n" +
+                    "Bill ID:          " + payment.getBillId() + "\n" +
+                    "Amount Paid:      " + UIUtils.formatCurrency(payment.getAmount()) + "\n" +
+                    "Payment Method:   " + payment.getPaymentMethod() + "\n" +
+                    "Transaction Date: " + payment.getPaymentDate() + "\n\n" +
+                    "Thank you! Your bill status is now PAID.",
+                    "Payment Confirmation", JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
+                if (onPaymentSuccessCallback != null) {
+                    onPaymentSuccessCallback.run();
+                }
+            } catch (Exception ex) {
+                setCursor(java.awt.Cursor.getDefaultCursor());
+                btnPayNow.setEnabled(true);
+                btnPayNow.setText("PAY NOW");
+                JOptionPane.showMessageDialog(this, "Payment Failed: " + ex.getMessage(), "Transaction Error", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Payment Failed: " + ex.getMessage(), "Transaction Error", JOptionPane.ERROR_MESSAGE);
-        }
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 }

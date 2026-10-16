@@ -274,6 +274,7 @@ public class UsageManagement extends JFrame {
         gbc.weightx = 0.6;
         comp.setFont(UIUtils.FONT_REGULAR);
         comp.setPreferredSize(new Dimension(190, 28));
+        comp.setMinimumSize(new Dimension(190, 28));
         panel.add(comp, gbc);
     }
 

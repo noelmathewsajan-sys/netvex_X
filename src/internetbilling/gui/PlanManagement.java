@@ -225,6 +225,7 @@ public class PlanManagement extends JFrame {
         gbc.weightx = 0.55;
         comp.setFont(UIUtils.FONT_REGULAR);
         comp.setPreferredSize(new Dimension(170, 28));
+        comp.setMinimumSize(new Dimension(170, 28));
         panel.add(comp, gbc);
     }
 

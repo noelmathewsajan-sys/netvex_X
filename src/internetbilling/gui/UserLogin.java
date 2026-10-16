@@ -46,7 +46,7 @@ public class UserLogin extends JFrame {
     }
 
     private void initComponents() {
-        setTitle("Customer Portal Login - Internet Billing Management System");
+        setTitle("NETVEX Customer Portal Login - Internet Billing Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(620, 540);
         setLocationRelativeTo(null);
@@ -69,7 +69,7 @@ public class UserLogin extends JFrame {
         ));
 
         // ISP Brand Tag
-        JLabel lblBrand = new JLabel("  FIBER BROADBAND SELF-SERVICE", SwingConstants.CENTER);
+        JLabel lblBrand = new JLabel("  NETVEX SELF-SERVICE", SwingConstants.CENTER);
         lblBrand.setIcon(UIUtils.getGlobeIcon(14, UIUtils.SECONDARY_BLUE));
         lblBrand.setFont(new Font("Segoe UI", Font.BOLD, 11));
         lblBrand.setForeground(UIUtils.SECONDARY_BLUE);

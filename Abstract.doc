@@ -1,0 +1,12 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<title>Abstract</title>
+</head>
+<body>
+<h2 style="text-align: center; font-family: 'Times New Roman', serif;">Abstract</h2>
+<p style="text-align: justify; line-height: 1.5; font-size: 12pt; font-family: 'Times New Roman', serif;">
+The NETVEX Internet Billing Management System is a comprehensive desktop application designed to streamline the operational and administrative workflows of Internet Service Providers (ISPs). Developed using Java Swing for a responsive graphical user interface and integrated with a MySQL database via JDBC, the system provides a reliable platform for managing subscribers, broadband plans, monthly data usage, and automated billing. The architecture is built on a centralized database model with strict relational constraints, ensuring high data integrity, while utilizing parameterized queries to secure against SQL injection vulnerabilities. The system offers two core modules: an Administrator Console for staff to manage customer profiles, configure internet packages, log usage, and monitor overall revenue; and a Subscriber Portal that allows customers to view their active plans, track data usage, download invoices, and perform simulated online payments. By automating tedious billing calculations and centralizing transaction records, this project significantly minimizes manual errors and enhances business efficiency, delivering a scalable and robust software solution for modern ISP management.
+</p>
+</body>
+</html>

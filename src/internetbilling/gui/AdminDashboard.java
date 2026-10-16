@@ -23,6 +23,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -55,7 +57,7 @@ public class AdminDashboard extends JFrame {
     }
 
     private void initComponents() {
-        setTitle("ISP Admin Control Center - Internet Billing Management System");
+        setTitle("NETVEX Admin Console - Internet Billing Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1100, 720);
         setLocationRelativeTo(null);
@@ -77,7 +79,7 @@ public class AdminDashboard extends JFrame {
         JPanel titleGroup = new JPanel(new GridLayout(2, 1, 0, 2));
         titleGroup.setOpaque(false);
 
-        JLabel lblAppTitle = new JLabel("FIBERLINK BROADBAND  |  ADMIN CONSOLE");
+        JLabel lblAppTitle = new JLabel("NETVEX  |  ADMIN CONSOLE");
         lblAppTitle.setFont(UIUtils.FONT_HEADER);
         lblAppTitle.setForeground(Color.WHITE);
 
@@ -138,6 +140,7 @@ public class AdminDashboard extends JFrame {
         JButton btnNavUsage = createSidebarButton("Monthly Usage", UIUtils.getUsageIcon(18, Color.WHITE), false, e -> openUsageManagement());
         JButton btnNavBills = createSidebarButton("Invoices & Bills", UIUtils.getBillsIcon(18, Color.WHITE), false, e -> openBillManagement());
         JButton btnNavPayments = createSidebarButton("Payment Records", UIUtils.getPaymentsIcon(18, Color.WHITE), false, e -> openPaymentHistory());
+        JButton btnNavDBSettings = createSidebarButton("Database Settings", UIUtils.getDatabaseIcon(18, Color.WHITE), false, e -> openDBSettingsDialog());
 
         sidebar.add(lblNavHeading);
         sidebar.add(Box.createVerticalStrut(10));
@@ -152,6 +155,8 @@ public class AdminDashboard extends JFrame {
         sidebar.add(btnNavBills);
         sidebar.add(Box.createVerticalStrut(4));
         sidebar.add(btnNavPayments);
+        sidebar.add(Box.createVerticalStrut(4));
+        sidebar.add(btnNavDBSettings);
 
         sidebar.add(Box.createVerticalGlue());
 
@@ -339,6 +344,57 @@ public class AdminDashboard extends JFrame {
 
     private void openPaymentHistory() {
         new PaymentHistory(null).setVisible(true);
+    }
+
+    private void openDBSettingsDialog() {
+        JTextField txtHost = new JTextField(DBConnection.getHost());
+        JTextField txtPort = new JTextField(String.valueOf(DBConnection.getPort()));
+        JTextField txtDb = new JTextField(DBConnection.getDatabase());
+        JTextField txtUser = new JTextField(DBConnection.getUsername());
+        JPasswordField txtPass = new JPasswordField(DBConnection.getPassword());
+
+        JPanel panel = new JPanel(java.awt.GridLayout.class.isAssignableFrom(JPanel.class) ? new java.awt.GridLayout(5, 2, 8, 8) : new java.awt.GridLayout(5, 2, 8, 8));
+        panel.setLayout(new java.awt.GridLayout(5, 2, 8, 8));
+        panel.add(new JLabel("MySQL Host / Server:"));
+        panel.add(txtHost);
+        panel.add(new JLabel("MySQL Port (e.g. 3307 or 3306):"));
+        panel.add(txtPort);
+        panel.add(new JLabel("Database Name:"));
+        panel.add(txtDb);
+        panel.add(new JLabel("MySQL Username:"));
+        panel.add(txtUser);
+        panel.add(new JLabel("MySQL Root Password:"));
+        panel.add(txtPass);
+
+        int result = JOptionPane.showConfirmDialog(
+            this, panel, "MySQL Database Connection Settings",
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                DBConnection.setDbEngine("MYSQL");
+                DBConnection.setHost(txtHost.getText().trim());
+                DBConnection.setPort(Integer.parseInt(txtPort.getText().trim()));
+                DBConnection.setDatabase(txtDb.getText().trim());
+                DBConnection.setUsername(txtUser.getText().trim());
+                DBConnection.setPassword(new String(txtPass.getPassword()));
+                DBConnection.saveConfiguration();
+
+                if (DBConnection.testConnection()) {
+                    JOptionPane.showMessageDialog(this,
+                        "Connected successfully to MySQL Server at " + DBConnection.getHost() + ":" + DBConnection.getPort() + "!",
+                        "Connection Success", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                        "Saved settings, but connection test failed.\nPlease make sure MySQL Server is running and InternetBillingDB exists.",
+                        "Connection Test Warning", JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error in DB settings: " + ex.getMessage(),
+                    "Configuration Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     public static void main(String[] args) {

@@ -1,234 +1,260 @@
-# Internet Billing Management System
+# NETVEX - Internet Billing Management System (MySQL & NetBeans Integration Guide)
 
-A desktop-based Internet Billing Management System built using **Java Swing**, developed in **Apache NetBeans**, and backed by **MySQL** via **JDBC**. Designed for Internet Service Providers (ISPs) to manage subscribers, bandwidth plans, monthly data usage, automated invoicing, and simulated customer payments.
-
----
-
-## 📌 Technologies
-
-- **Java (JDK 11 / 17 / 21+)**
-- **Java Swing** (Desktop GUI with clean modern layout)
-- **Apache NetBeans** (Ant-based project management)
-- **JDBC** (Java Database Connectivity via MySQL Connector/J)
-- **MySQL (v8.0+)**
-- **MySQL Workbench** (Database administration & script execution)
+**NETVEX** is a desktop-based Internet Billing Management System built using **Java Swing**, developed in **Apache NetBeans**, and connected to a local **MySQL Server** via **JDBC (MySQL Connector/J 8.3.0)**. Designed for Internet Service Providers (ISPs) to manage subscribers, broadband plans, monthly data usage, automated billing calculations, and simulated online customer payments.
 
 ---
 
-## 🚀 Features
+## Architecture & Technology Stack
 
-- **Administrator Login:** Secure authentication for ISP management staff.
-- **User / Customer Login:** Dedicated subscriber portal for customers to view plans, track data usage, and pay bills.
-- **Customer Management:** Comprehensive CRUD operations (Add, Update, Search, Delete) with validation and plan assignment.
-- **Internet Plan Management:** Flexible configuration of broadband tiers, data caps, tariffs, extra usage charges per GB, equipment rentals, and late fines.
-- **Monthly Usage Tracking:** Monthly subscriber quota and consumption tracking with automated extra-data calculation.
-- **Automatic Bill Calculation:** Real-time billing engine computing total dues:
-  $$\text{Total Bill} = \text{Plan Tariff} + \text{Equipment Rental} + (\text{Extra Data} \times \text{Extra Charge/GB}) + \text{Late Fine}$$
-- **Bill Management:** Search and filter invoices by status (`ALL`, `PAID`, `UNPAID`, `OVERDUE`) and print/preview official invoices.
-- **Simulated Online Payment:** Payment gateway simulation supporting UPI, Debit Card, Credit Card, and Net Banking with instant receipt generation (`PAY-XXXXX`).
-- **Payment History:** Complete subscriber payment and transaction history logs.
-- **Dashboard Statistics:** Live KPI counters displaying Total Customers, Active Customers, Total Invoices, Paid/Unpaid/Overdue Counts, and Collected Revenue.
-- **MySQL Database Integration:** Complete relational schema with foreign key constraints, cascade rules, and automated schema generation.
+```
+   ┌────────────────────────────────────────────────────────┐
+   │         Apache NetBeans Java Swing Application         │
+   │  (Admin Console, Subscriber Portal, Billing & Payment) │
+   └───────────────────────────┬────────────────────────────┘
+                               │
+                               ▼
+   ┌────────────────────────────────────────────────────────┐
+   │             JDBC (MySQL Connector/J 8.3.0)             │
+   │           Centralized: DBConnection.java               │
+   └───────────────────────────┬────────────────────────────┘
+                               │
+                               ▼
+   ┌────────────────────────────────────────────────────────┐
+   │         Local MySQL Server (Port 3307 / 3306)          │
+   └───────────────────────────┬────────────────────────────┘
+                               │
+                               ▼
+   ┌────────────────────────────────────────────────────────┐
+   │              Database: InternetBillingDB               │
+   │                                                        │
+   │  ┌───────────┐  ┌─────────────┐  ┌──────────────────┐  │
+   │  │   admin   │  │    plans    │  │    customers     │  │
+   │  └───────────┘  └─────────────┘  └──────────────────┘  │
+   │  ┌───────────┐  ┌─────────────┐  ┌──────────────────┐  │
+   │  │   usage   │  │    bills    │  │     payments     │  │
+   │  └───────────┘  └─────────────┘  └──────────────────┘  │
+   └────────────────────────────────────────────────────────┘
+```
+
+- **Programming Language:** Java (JDK 11, 17, or 21+)
+- **GUI Framework:** Java Swing (Professional Dark Navy `#0F2747` & Blue `#1976D2` ISP theme)
+- **IDE:** Apache NetBeans (Ant-based project configuration)
+- **Database Driver:** MySQL Connector/J 8.3.0 (`mysql-connector-j-8.3.0.jar`)
+- **Database Engine:** MySQL Server 8.0 (Service: `MySQL80`, Port: `3307` / `3306`)
+- **Database Tool:** MySQL Workbench
 
 ---
 
-## 🗄️ Database: `InternetBillingDB`
+## Complete Step-by-Step Setup & Integration Guide
 
-The application uses a relational schema with 6 interrelated tables:
-- **`Admin`**: Stores administrative credentials and roles.
-- **`Plans`**: Internet broadband packages, bandwidth speed tiers, data limits, and pricing.
-- **`Customers`**: Subscriber account profiles linked to their selected plan.
-- **`Usage`**: Monthly data consumption records per customer.
-- **`Bills`**: Computed monthly invoices with line-item breakdowns.
-- **`Payments`**: Transaction records linked to invoices and customers.
+### 1. Starting MySQL Server
 
----
+Before launching the Java application, verify that your local MySQL Server service is running.
 
-## 📁 Project Structure
+#### Option A: Via Windows Services
+1. Press `Win + R`, type `services.msc`, and press **Enter**.
+2. Scroll down to locate **MySQL80** (or your named MySQL service).
+3. Check the **Status** column:
+   - If it is not running, right-click **MySQL80** and click **Start**.
+   - Ensure the **Startup Type** is set to **Automatic**.
 
-```text
-InternetBillingManagementSystem/
-├── build.xml                                # Apache NetBeans Ant build configuration
-├── compile.bat                              # Command-line compilation script
-├── run.bat                                  # Command-line application launcher
-├── test.bat                                 # Command-line test runner
-├── manifest.mf                              # Java application manifest
-├── database.sql                             # MySQL Database DDL & sample data script
-├── mysql_database.sql                       # MySQL schema & sample records
-├── mssql_database.sql                       # Microsoft SQL Server alternative script
-├── db.properties.example                    # Template configuration file for database credentials
-├── .gitignore                               # Excludes build artifacts, secrets, and IDE caches
-├── .gitattributes                           # Git line ending and binary normalization
-├── VIVA_GUIDE.md                            # Comprehensive B.Tech project viva & concept guide
-├── nbproject/                               # NetBeans project configuration
-│   ├── build-impl.xml
-│   ├── genfiles.properties
-│   ├── project.properties
-│   └── project.xml
-├── lib/                                     # Bundled JDBC driver libraries
-│   ├── mysql-connector-j-8.3.0.jar          # MySQL JDBC Driver
-│   ├── mssql-jdbc-12.6.1.jre11.jar          # MSSQL JDBC Driver
-│   └── h2-2.2.224.jar                       # Embedded Database Driver (offline demo mode)
-└── src/                                     # Java source code
-    └── internetbilling/
-        ├── Main.java                        # Application entry point
-        ├── dao/                             # Data Access Objects (SQL queries)
-        │   ├── AdminDAO.java
-        │   ├── BillDAO.java
-        │   ├── CustomerDAO.java
-        │   ├── PaymentDAO.java
-        │   ├── PlanDAO.java
-        │   └── UsageDAO.java
-        ├── database/                        # Database connectivity manager
-        │   └── DBConnection.java
-        ├── gui/                             # Java Swing UI frames and dialogs
-        │   ├── AdminDashboard.java
-        │   ├── AdminLogin.java
-        │   ├── BillManagement.java
-        │   ├── BillPrintDialog.java
-        │   ├── CustomerManagement.java
-        │   ├── MyBills.java
-        │   ├── MyProfile.java
-        │   ├── MyUsage.java
-        │   ├── PaymentForm.java
-        │   ├── PaymentHistory.java
-        │   ├── PlanManagement.java
-        │   ├── UIUtils.java
-        │   ├── UsageManagement.java
-        │   ├── UserDashboard.java
-        │   ├── UserLogin.java
-        │   └── WelcomeFrame.java
-        ├── model/                           # Domain entity POJOs
-        │   ├── Admin.java
-        │   ├── Bill.java
-        │   ├── Customer.java
-        │   ├── Payment.java
-        │   ├── Plan.java
-        │   └── Usage.java
-        ├── service/                         # Business logic services
-        │   ├── BillingService.java
-        │   ├── LoginService.java
-        │   └── PaymentService.java
-        └── test/                            # Verification tests
-            ├── TestAdminUserEntry.java
-            └── TestUIRendering.java
+#### Option B: Via Windows PowerShell (Administrator)
+Run the following command to check and start the service:
+```powershell
+Get-Service *mysql*
+Start-Service MySQL80
+```
+
+#### Option C: Via Command Prompt (Administrator)
+```cmd
+net start MySQL80
 ```
 
 ---
 
-## ⚙️ Prerequisites
+### 2. Opening MySQL Workbench
 
-1. **Java Development Kit (JDK 11, 17, or 21+)** installed and configured on your system `PATH`.
-2. **MySQL Server (v8.0+)** running locally or on a reachable network host.
-3. **MySQL Workbench** (or phpMyAdmin / MySQL CLI) for executing the SQL setup script.
-4. **Apache NetBeans IDE (v12.0+)** to open, build, and run the project.
-
----
-
-## 🛠️ Step-by-Step Setup Guide
-
-### Step 1: Configure MySQL and Run the SQL Script
-
-1. Open **MySQL Workbench** and connect to your local MySQL Server instance.
-2. In the top menu, go to **File** > **Open SQL Script...** (or press `Ctrl + Shift + O`).
-3. Select the file [`database.sql`](database.sql) located in the project root directory.
-4. Execute the entire script by clicking the **Execute (⚡ Lightning bolt)** icon or pressing `Ctrl + Shift + Enter`.
-5. Verify in the Schemas pane that **`InternetBillingDB`** has been created with all 6 tables populated with initial sample data.
-
-*Alternatively, via the MySQL command line:*
-```bash
-mysql -u root -p < database.sql
-```
+1. Click the Windows **Start Menu**, search for **MySQL Workbench**, and launch the application.
+2. In the **MySQL Connections** home screen, click on your local connection:
+   - Connection name: **Local instance MySQL80**
+   - Host: `localhost`
+   - Port: `3307` (or `3306` if configured on default port)
+   - Username: `root`
+3. Enter your MySQL root password when prompted and click **OK**.
+4. You will be taken to the SQL Query Editor interface.
 
 ---
 
-### Step 2: Configure the Database Connection
+### 3. Creating and Importing `InternetBillingDB`
 
-The application reads database configuration from a local file named `db.properties`.
+To create the database, tables, foreign key constraints, and initial ISP sample records:
 
-1. In the project root directory, locate [`db.properties.example`](db.properties.example).
-2. Create a copy of `db.properties.example` and name it `db.properties`:
-   ```bash
-   cp db.properties.example db.properties
+1. In MySQL Workbench, go to the top menu: **File** > **Open SQL Script...** (or press `Ctrl + Shift + O`).
+2. Navigate to your project directory and select:
+   ```text
+   database.sql
    ```
-3. Open `db.properties` in any text editor and update the credentials to match your MySQL setup:
+3. Inspect the SQL script. It creates:
+   - `CREATE DATABASE IF NOT EXISTS InternetBillingDB;`
+   - **`Admin`**: Administrator login accounts.
+   - **`Plans`**: Internet broadband packages (speeds, limits, tariffs, rentals, fines).
+   - **`Customers`**: Subscriber account profiles linked to their selected plan.
+   - **`Usage`**: Monthly subscriber data consumption records (`UQ_Usage_Customer_Month`).
+   - **`Bills`**: Computed invoices with itemized charges and payment statuses.
+   - **`Payments`**: Payment transactions linked to invoices and customer accounts.
+4. Execute the entire script by clicking the **Execute (⚡ Lightning Bolt)** icon on the toolbar, or press `Ctrl + Shift + Enter`.
+5. In the left **Navigator** pane, switch to the **Schemas** tab and click the **Refresh** icon.
+6. Verify that **`InternetBillingDB`** appears with all 6 tables:
+   - `admin`
+   - `customers`
+   - `plans`
+   - `usage`
+   - `bills`
+   - `payments`
+
+---
+
+### 4. Configuring the MySQL Root Password
+
+The project uses a centralized properties file (`db.properties`) to store database connection settings. This decouples credentials from Java source files.
+
+1. Open `db.properties` in any text editor.
+2. Set your MySQL root password:
    ```properties
+   # Database Configuration for Internet Billing Management System
    db.engine=MYSQL
    db.host=localhost
-   db.port=3306
+   db.port=3307
    db.name=InternetBillingDB
    db.user=root
-   db.password=YOUR_MYSQL_PASSWORD
+   db.password=Guzxc123
    db.trustServerCertificate=true
    db.encrypt=false
    db.integratedSecurity=false
    ```
-4. **Security Note:** `db.properties` is listed in `.gitignore` so your personal database password will never be committed to Git.
-
-> **Interactive GUI Alternative:** You can also configure the database directly from the application's Welcome screen by clicking the **"DB Config"** button, entering your password, and clicking **Save**.
-
----
-
-### Step 3: Open the Project in Apache NetBeans
-
-1. Launch **Apache NetBeans IDE**.
-2. Go to **File** > **Open Project...** (or press `Ctrl + Shift + O`).
-3. Browse to the directory:
-   ```text
-   InternetBillingManagementSystem
-   ```
-4. NetBeans will identify the coffee cup project icon indicating an Ant-based Java Application. Click **Open Project**.
-5. The project will appear in the **Projects** explorer tab with all source packages and libraries linked.
+   *(Note: If your MySQL service is on port 3306, simply change `db.port=3306`)*
+3. Save the file.
+4. *(Alternative)* You can also configure the password from the running application's GUI:
+   - Launch the application to the **Welcome Screen**.
+   - Click the **"DB Config"** button in the top right.
+   - Choose **MySQL / MySQL Workbench**.
+   - Enter your password and port, then click **OK**. The application will test the connection and save `db.properties` automatically.
 
 ---
 
-### Step 4: Build and Run the Application
+### 5. Adding the MySQL JDBC Driver to the NetBeans Project
 
-#### Option A: Inside Apache NetBeans
-1. In the **Projects** panel, right-click **InternetBillingManagementSystem** and select **Clean and Build** (`Shift + F11`).
-2. Once the build completes successfully, right-click the project and select **Run** (`F6`).
-3. The **Internet Billing Management System** Welcome screen will open.
+The MySQL JDBC Driver (`mysql-connector-j-8.3.0.jar`) is bundled in the project's `lib/` directory and pre-configured in `nbproject/project.properties`.
 
-#### Option B: From Command Prompt / PowerShell (Without IDE)
-The project includes convenient Windows batch scripts:
+To verify or add it manually in **Apache NetBeans**:
+1. Open **Apache NetBeans**.
+2. Open the project: **File** > **Open Project...** > select `InternetBillingManagementSystem`.
+3. In the **Projects** panel on the left, expand **InternetBillingManagementSystem**.
+4. Right-click on **Libraries** and check if `mysql-connector-j-8.3.0.jar` is listed.
+5. If missing:
+   - Right-click **Libraries** -> select **Add JAR/Folder...**
+   - Browse to `InternetBillingManagementSystem/lib/mysql-connector-j-8.3.0.jar`
+   - Click **Open**.
+
+---
+
+### 6. Centralized `DBConnection.java` Configuration
+
+Database connectivity is managed exclusively by [`DBConnection.java`](file:///c:/Users/mathe/CrossDevice/ZOROK/PHY%20S1/java/InternetBillingManagementSystem/src/internetbilling/database/DBConnection.java):
+- **Package:** `internetbilling.database.DBConnection`
+- **Driver:** `com.mysql.cj.jdbc.Driver`
+- **Connection URL:**
+  ```java
+  jdbc:mysql://localhost:3307/InternetBillingDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&connectTimeout=3000
+  ```
+- **Configuration Loading:** Dynamically reads `db.properties` at runtime.
+- **Fail-Safe Diagnostics:** When configured for MySQL, it validates connectivity directly against MySQL Server. If the service is stopped, password is wrong (Error 1045), or database is missing (Error 1049), it reports the exact diagnostic reason instead of silently falling back to fake in-memory data.
+- **Security:** All database queries across all DAO classes use parameterized `PreparedStatement` to guarantee SQL injection immunity.
+
+---
+
+### 7. Running the Java Swing Application
+
+#### In Apache NetBeans IDE:
+1. Right-click **InternetBillingManagementSystem** in the **Projects** tab.
+2. Select **Clean and Build** (`Shift + F11`).
+3. Once the build completes, right-click the project and select **Run** (`F6`).
+4. The **NETVEX - Welcome Screen** will display.
+
+#### From the Command Line / Windows Terminal:
+You can also build and test directly using the provided Windows scripts:
 ```cmd
-# Compile the sources into build/classes and bundle the JAR
-compile.bat
+# Compile all Java sources
+.\compile.bat
 
-# Launch the application
-run.bat
+# Run the full automated verification test suite
+.\test.bat
 
-# Run the test suite
-test.bat
+# Launch the interactive Swing GUI
+.\run.bat
 ```
 
----
-
-## 🔑 Default Login Credentials (Sample Data)
-
-### 🛡️ Administrator Account
-| Role | Username | Password |
-| :--- | :--- | :--- |
-| **Administrator** | `admin` | `admin123` |
-
-### 👤 Sample Customer Accounts
-| Customer ID | Subscriber Name | Username | Password | Assigned Plan |
-| :--- | :--- | :--- | :--- | :--- |
-| `CUST101` | John Doe | `johndoe` | `cust123` | Standard Home (50 Mbps) |
-| `CUST102` | Sarah Connor | `sarahc` | `cust123` | Premium Streamer (100 Mbps) |
-| `CUST103` | Michael Scott | `michaels` | `cust123` | Basic Starter (25 Mbps) |
-| `CUST104` | Bruce Wayne | `brucew` | `cust123` | Ultra Enterprise (300 Mbps) |
-| `CUST105` | Peter Parker | `peterp` | `cust123` | Standard Home (50 Mbps) |
+#### Default Credentials:
+- **Administrator Login:**
+  - Username: `admin`
+  - Password: `admin123`
+- **Subscriber / Customer Login:**
+  - Username: `johndoe`
+  - Password: `cust123`
+  *(Other customer accounts: `sarahc`, `michaels`, `brucew` - all with password `cust123`)*
 
 ---
 
-## 🔒 Security Practices
+### 8. Checking Application Data in MySQL Workbench
 
-- **Zero Credential Leakage:** Sensitive local credentials in `db.properties` and environment files are strictly excluded via `.gitignore`.
-- **Prepared Statements:** All database queries in the DAO layer use parameterized `PreparedStatement` to prevent SQL injection vulnerabilities.
-- **Secure Password Fields:** Password inputs in Swing GUI use `JPasswordField` with memory clearing.
+Every change made in the Java Swing application immediately persists to MySQL. You can verify this in real-time using MySQL Workbench.
+
+Open a new SQL tab in MySQL Workbench and run:
+
+```sql
+USE InternetBillingDB;
+
+-- 1. Check Administrator Account
+SELECT * FROM Admin;
+
+-- 2. Check Internet Broadband Plans
+SELECT * FROM Plans;
+
+-- 3. Check All Registered Customers
+SELECT * FROM Customers;
+
+-- 4. Check Monthly Data Usage Records
+SELECT * FROM `Usage`;
+
+-- 5. Check Invoices & Billing Records
+SELECT * FROM Bills;
+
+-- 6. Check Online Payment Transactions
+SELECT * FROM Payments;
+```
+
+#### Real-Time Verification Actions to Test:
+1. **Add Customer in Java GUI:**
+   - Log in as **Admin** -> Click **Customers** -> Fill out form -> Click **Register Customer**.
+   - In MySQL Workbench: `SELECT * FROM Customers;` -> The new customer row is visible.
+2. **Record Monthly Usage:**
+   - Log in as **Admin** -> Click **Monthly Usage** -> Select customer and month -> Enter data used -> Click **Save Usage**.
+   - In MySQL Workbench: `SELECT * FROM `Usage`;` -> The new usage row is visible.
+3. **Generate Bill:**
+   - In **Invoices & Bills** -> Select customer and billing month -> Click **Calculate & Generate Bill**.
+   - In MySQL Workbench: `SELECT * FROM Bills;` -> The generated bill row with status `UNPAID` is visible.
+4. **Make Simulated Payment:**
+   - Log in as Customer (`johndoe`) -> Go to **Pay Bills Online** -> Pay the outstanding bill with simulated UPI or Card.
+   - In MySQL Workbench:
+     - `SELECT * FROM Payments;` -> New payment row created (`PAY-XXXXX`).
+     - `SELECT * FROM Bills WHERE customer_id = 'CUST101';` -> Bill status updated to `PAID`.
+5. **Dashboard Statistics:**
+   - Reopen or refresh the **Admin Dashboard** -> Total Customers, Invoices, Paid/Unpaid counts, and Revenue reflect exact database values.
 
 ---
 
-## 📄 License
-This project is developed for educational and academic evaluation purposes.
+## Security & Data Integrity Highlights
+
+- **Strict Relational Constraints:** Foreign keys ensure referential integrity between `Customers`, `Plans`, `Usage`, `Bills`, and `Payments`.
+- **Prepared Statements:** No user input is ever concatenated directly into SQL queries.
+- **Duplicate Prevention:** Unique constraints prevent duplicate bills or duplicate monthly usage records for the same customer and billing cycle.

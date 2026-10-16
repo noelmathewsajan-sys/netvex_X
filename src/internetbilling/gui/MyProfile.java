@@ -121,7 +121,9 @@ public class MyProfile extends JFrame {
     }
 
     private JTextField createField(boolean editable) {
-        JTextField tf = new JTextField(20);
+        JTextField tf = new JTextField(25); // Added columns
+        tf.setPreferredSize(new Dimension(280, 34)); // Fixed squished width issue
+        tf.setMinimumSize(new Dimension(280, 34));   // Force minimum size to prevent layout squishing
         tf.setFont(UIUtils.FONT_REGULAR);
         tf.setEditable(editable);
         if (!editable) {

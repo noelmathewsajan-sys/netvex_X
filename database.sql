@@ -73,8 +73,8 @@ CREATE TABLE Bills (
     total_amount DECIMAL(10,2) NOT NULL,
     due_date DATE NOT NULL,
     bill_status VARCHAR(20) NOT NULL DEFAULT 'UNPAID',
-    CONSTRAINT FK_Bills_Customers FOREIGN KEY (customer_id) REFERENCES Customers(customer_id),
-    CONSTRAINT FK_Bills_Usage FOREIGN KEY (usage_id) REFERENCES `Usage`(usage_id),
+    CONSTRAINT FK_Bills_Customers FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE CASCADE,
+    CONSTRAINT FK_Bills_Usage FOREIGN KEY (usage_id) REFERENCES `Usage`(usage_id) ON DELETE SET NULL,
     CONSTRAINT UQ_Bills_Customer_Month UNIQUE (customer_id, billing_month)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -88,25 +88,25 @@ CREATE TABLE Payments (
     payment_method VARCHAR(50) NOT NULL,
     payment_reference VARCHAR(100) NOT NULL,
     payment_status VARCHAR(20) NOT NULL DEFAULT 'SUCCESS',
-    CONSTRAINT FK_Payments_Bills FOREIGN KEY (bill_id) REFERENCES Bills(bill_id),
-    CONSTRAINT FK_Payments_Customers FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+    CONSTRAINT FK_Payments_Bills FOREIGN KEY (bill_id) REFERENCES Bills(bill_id) ON DELETE CASCADE,
+    CONSTRAINT FK_Payments_Customers FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ============================================================================
--- Sample Data
+-- Sample Initial Data (ISP Demo Data)
 -- ============================================================================
 
--- 1. Insert Administrator
+-- 1. Administrator Account
 INSERT INTO Admin (username, password) VALUES ('admin', 'admin123');
 
--- 2. Insert Plans
+-- 2. Broadband Plans
 INSERT INTO Plans (plan_id, plan_name, speed_tier, monthly_tariff, data_limit, extra_data_charge, equipment_rental, late_payment_fine) VALUES
 ('PLAN01', 'Basic Starter', '25 Mbps', 399.00, 100.00, 10.00, 50.00, 50.00),
 ('PLAN02', 'Standard Home', '50 Mbps', 699.00, 250.00, 8.00, 75.00, 75.00),
 ('PLAN03', 'Premium Streamer', '100 Mbps', 999.00, 500.00, 5.00, 100.00, 100.00),
 ('PLAN04', 'Ultra Enterprise', '300 Mbps', 1499.00, 1000.00, 3.00, 150.00, 150.00);
 
--- 3. Insert Customers
+-- 3. Customers
 INSERT INTO Customers (customer_id, name, address, phone, email, username, password, plan_id, connection_date, status) VALUES
 ('CUST101', 'John Doe', '123 Elm Street, Cityville', '9876543210', 'john.doe@email.com', 'johndoe', 'cust123', 'PLAN02', '2026-01-15', 'ACTIVE'),
 ('CUST102', 'Sarah Connor', '456 Pine Avenue, Metropolis', '9876543211', 'sarah.c@email.com', 'sarahc', 'cust123', 'PLAN03', '2026-02-10', 'ACTIVE'),
@@ -114,7 +114,7 @@ INSERT INTO Customers (customer_id, name, address, phone, email, username, passw
 ('CUST104', 'Bruce Wayne', '1007 Mountain Drive, Gotham', '9876543213', 'bruce.w@email.com', 'brucew', 'cust123', 'PLAN04', '2026-01-20', 'ACTIVE'),
 ('CUST105', 'Peter Parker', '20 Ingram Street, Queens', '9876543214', 'peter.p@email.com', 'peterp', 'cust123', 'PLAN02', '2026-04-12', 'INACTIVE');
 
--- 4. Insert Usage
+-- 4. Monthly Usage
 INSERT INTO `Usage` (customer_id, billing_month, data_used, extra_data) VALUES
 ('CUST101', '2026-08', 220.00, 0.00),
 ('CUST101', '2026-09', 275.00, 25.00),
@@ -124,7 +124,7 @@ INSERT INTO `Usage` (customer_id, billing_month, data_used, extra_data) VALUES
 ('CUST103', '2026-09', 115.00, 15.00),
 ('CUST104', '2026-09', 650.00, 0.00);
 
--- 5. Insert Bills
+-- 5. Monthly Bills
 INSERT INTO Bills (bill_id, customer_id, usage_id, billing_month, plan_tariff, equipment_rental, extra_usage_charge, late_fine, total_amount, due_date, bill_status) VALUES
 ('BILL-202608-101', 'CUST101', 1, '2026-08', 699.00, 75.00, 0.00, 0.00, 774.00, '2026-09-05', 'PAID'),
 ('BILL-202609-101', 'CUST101', 2, '2026-09', 699.00, 75.00, 200.00, 0.00, 974.00, '2026-10-05', 'UNPAID'),
@@ -132,7 +132,7 @@ INSERT INTO Bills (bill_id, customer_id, usage_id, billing_month, plan_tariff, e
 ('BILL-202609-102', 'CUST102', 4, '2026-09', 999.00, 100.00, 150.00, 0.00, 1249.00, '2026-10-05', 'UNPAID'),
 ('BILL-202608-103', 'CUST103', 5, '2026-08', 399.00, 50.00, 0.00, 50.00, 499.00, '2026-09-05', 'OVERDUE');
 
--- 6. Insert Payments
+-- 6. Payment Transactions
 INSERT INTO Payments (payment_id, bill_id, customer_id, payment_date, amount, payment_method, payment_reference, payment_status) VALUES
 ('PAY-88001', 'BILL-202608-101', 'CUST101', '2026-09-02 11:30:00', 774.00, 'UPI', 'UPI-REF-99281729', 'SUCCESS'),
 ('PAY-88002', 'BILL-202608-102', 'CUST102', '2026-09-03 14:15:22', 1099.00, 'Credit Card', 'TXN-CC-48201948', 'SUCCESS');

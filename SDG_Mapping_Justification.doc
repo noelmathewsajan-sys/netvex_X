@@ -1,0 +1,318 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<title>SDG Mapping with Justification - Internet Billing Management System</title>
+<style>
+  body {
+    font-family: 'Times New Roman', serif;
+    font-size: 12pt;
+    line-height: 1.3;
+    margin: 20px;
+  }
+  h2, h3 {
+    text-align: center;
+    font-family: 'Times New Roman', serif;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 25px;
+  }
+  table, th, td {
+    border: 1px solid black;
+  }
+  th {
+    background-color: #e6e6e6;
+    padding: 9px;
+    font-weight: bold;
+    text-align: center;
+  }
+  td {
+    padding: 8px;
+    vertical-align: top;
+  }
+  .center {
+    text-align: center;
+  }
+  .co-header {
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .na-text {
+    color: #444444;
+  }
+</style>
+</head>
+<body>
+
+<h2>SUSTAINABLE DEVELOPMENT GOALS (SDG) MAPPING &amp; JUSTIFICATION</h2>
+<p style="text-align: center; font-weight: bold;">PROJECT: NETVEX - INTERNET BILLING MANAGEMENT SYSTEM</p>
+
+<!-- Table 1: Exact College Template Format (SDG 16 Focus) -->
+<h3>Option A: Exact Standard Format (SDG 16 Institutional Accountability)</h3>
+<table>
+  <thead>
+    <tr>
+      <th style="width: 15%;">COs</th>
+      <th style="width: 18%;">SDG MAPPED</th>
+      <th style="width: 17%;">LEVEL OF MAPPING</th>
+      <th style="width: 50%;">JUSTIFICATION</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- PCO1 -->
+    <tr>
+      <td rowspan="6" class="co-header">PCO1</td>
+      <td class="center">16</td>
+      <td class="center">3</td>
+      <td>PCO1 supports SDG 16 by providing transparent, role-based graphical interfaces that ensure accountable, tamper-evident interaction between ISP management and subscribers.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+
+    <!-- PCO2 -->
+    <tr>
+      <td rowspan="6" class="co-header">PCO2</td>
+      <td class="center">16</td>
+      <td class="center">3</td>
+      <td>PCO2 supports SDG 16 through secure MySQL database storage, strict relational integrity, and dependable financial and subscriber record retention.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+
+    <!-- PCO3 -->
+    <tr>
+      <td rowspan="6" class="co-header">PCO3</td>
+      <td class="center">16</td>
+      <td class="center">3</td>
+      <td>PCO3 supports SDG 16 by implementing structured JDBC transaction flows that prevent unauthorized data changes and maintain audited billing operations.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+
+    <!-- PCO4 -->
+    <tr>
+      <td rowspan="6" class="co-header">PCO4</td>
+      <td class="center">16</td>
+      <td class="center">3</td>
+      <td>PCO4 supports SDG 16 through authentication, parameterized PreparedStatements, and access controls that defend financial data against cyber threats and injection attacks.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+
+    <!-- PCO5 -->
+    <tr>
+      <td rowspan="6" class="co-header">PCO5</td>
+      <td class="center">16</td>
+      <td class="center">3</td>
+      <td>PCO5 supports SDG 16 by automating fair, transparent tariff calculations and generating tamper-proof electronic receipts, eliminating arbitrary charges and fraud.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+
+    <!-- PCO6 -->
+    <tr>
+      <td rowspan="6" class="co-header">PCO6</td>
+      <td class="center">16</td>
+      <td class="center">3</td>
+      <td>PCO6 supports SDG 16 by validating software accuracy and data integrity across all workflows, fostering user trust in institutional telecommunication services.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+    <tr>
+      <td class="center na-text">N/A</td>
+      <td class="center na-text">N/A</td>
+      <td class="na-text">No additional SDG mapping is specified in the project document.</td>
+    </tr>
+  </tbody>
+</table>
+
+<br/>
+
+<!-- Table 2: Multi-SDG Format (SDG 9, 12, 16) in case the university evaluates multiple goals -->
+<h3>Option B: Comprehensive Multi-SDG Mapping (SDG 9, SDG 12 &amp; SDG 16)</h3>
+<table>
+  <thead>
+    <tr>
+      <th style="width: 12%;">COs</th>
+      <th style="width: 25%;">SDG MAPPED</th>
+      <th style="width: 15%;">LEVEL OF MAPPING</th>
+      <th style="width: 48%;">JUSTIFICATION</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="co-header">PCO1</td>
+      <td>SDG 9: Industry, Innovation and Infrastructure</td>
+      <td class="center">3</td>
+      <td>Delivers an innovative digital desktop management interface that modernizes telecommunication service infrastructure.</td>
+    </tr>
+    <tr>
+      <td class="co-header">PCO2</td>
+      <td>SDG 16: Peace, Justice &amp; Strong Institutions</td>
+      <td class="center">3</td>
+      <td>Builds transparent, auditable, and secure database repositories that protect consumer data and financial transactions.</td>
+    </tr>
+    <tr>
+      <td class="co-header">PCO3</td>
+      <td>SDG 9: Industry, Innovation and Infrastructure</td>
+      <td class="center">3</td>
+      <td>Implements robust JDBC middleware enabling resilient, interconnected data infrastructure for ISP operations.</td>
+    </tr>
+    <tr>
+      <td class="co-header">PCO4</td>
+      <td>SDG 16: Peace, Justice &amp; Strong Institutions</td>
+      <td class="center">3</td>
+      <td>Enforces defensive cyber controls and parameterized validation to prevent cybercrime and maintain institutional data safety.</td>
+    </tr>
+    <tr>
+      <td class="co-header">PCO5</td>
+      <td>SDG 12: Responsible Consumption &amp; Production</td>
+      <td class="center">3</td>
+      <td>Replaces paper invoices with automated digital billing, substantially reducing paper consumption and administrative waste.</td>
+    </tr>
+    <tr>
+      <td class="co-header">PCO6</td>
+      <td>SDG 16: Peace, Justice &amp; Strong Institutions</td>
+      <td class="center">3</td>
+      <td>Validates billing calculations and system operations to ensure zero financial discrepancies and maintain consumer trust.</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
